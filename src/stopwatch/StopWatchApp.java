@@ -26,14 +26,17 @@ public class StopWatchApp extends Application {
         mainGrid.setAlignment(Pos.CENTER);
         
         Label timerLabel = new Label("0");
+        Button startButton = new Button("Start");
+        Button stopButton = new Button("Stop");
+        Button resetButton = new Button("Reset");
+        
         timerLabel.setFont(Font.font("Liberation Sans", 32));
         GridPane.setHalignment(timerLabel, HPos.CENTER);
-        mainGrid.add(timerLabel, 0, 0, 2, 1);
         
-        Button startButton = new Button("Start");
+        mainGrid.add(timerLabel, 0, 0, 3, 1);
         mainGrid.add(startButton, 0, 1);
-        Button stopButton = new Button("Stop");
         mainGrid.add(stopButton, 1, 1);
+        mainGrid.add(resetButton, 2, 1);
         mainGrid.setVgap(10);
         mainGrid.setHgap(10);
 
@@ -53,6 +56,13 @@ public class StopWatchApp extends Application {
             public void handle(ActionEvent actionevent) {
                 timer.stop();
             }
+        });
+        
+        resetButton.setOnAction(new EventHandler<ActionEvent>() {
+           @Override
+           public void handle(ActionEvent actionevent) {
+               timer.reset();
+           }
         });
         
         Scene scene = new Scene(mainGrid, 300, 250);
