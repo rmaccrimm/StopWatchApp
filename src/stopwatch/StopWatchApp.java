@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author rmaccrimmon
  */
-public class StopWarchApp extends Application {
+public class StopWatchApp extends Application {
     
     @Override
     public void start(Stage primaryStage) {
