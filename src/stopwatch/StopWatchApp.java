@@ -66,7 +66,7 @@ public class StopWatchApp extends Application {
         });
         
         Scene scene = new Scene(mainGrid, 300, 250);
-        primaryStage.setTitle("Timer");
+        primaryStage.setTitle("Stop Watch");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

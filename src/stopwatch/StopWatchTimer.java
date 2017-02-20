@@ -1,10 +1,10 @@
 package stopwatch;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javafx.application.Platform;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Label;
-import javax.swing.Timer;
+import javafx.util.Duration;
 
 /**
  *
@@ -12,7 +12,7 @@ import javax.swing.Timer;
  */
 public class StopWatchTimer {
     
-    private final Timer timer;
+    private final Timeline timer;
     private final Label listener;
     private final int decimals;
     private int time;
@@ -22,11 +22,19 @@ public class StopWatchTimer {
         listener = timerLabel;
         decimals = decimalPlaces;
         
-        Runnable updateTime = new Runnable(){ 
-            @Override
-            public void run() {
-                listener.setText(StopWatchTimer.formatTime(time++, decimals));
-            }
+        timer = new Timeline(
+                new KeyFrame(Duration.ZERO, actionEvent -> {
+                    listener.setText(StopWatchTimer.formatTime(
+                            time++, decimals));
+                }), 
+                new KeyFrame(Duration.millis(1))
+        );
+        timer.setCycleCount(Animation.INDEFINITE);
+    }
+
+        /*
+        Runnable updateTime = () -> {
+            listener.setText(StopWatchTimer.formatTime(time++, decimals));
         };
         
         ActionListener taskPerformer = new ActionListener() {
@@ -36,13 +44,13 @@ public class StopWatchTimer {
             }
         };
         timer =  new Timer(1, taskPerformer);
-    }
+    }*/
     
-    /**
-     * Start the timer
-     */
+        /**
+         * Start the timer
+         */
     public void start() {
-        timer.start();
+        timer.play();
         isRunning = true;
     }
     
