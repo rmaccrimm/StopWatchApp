@@ -16,11 +16,15 @@ public class StopWatchTimer {
     private final Label listener;
     private final int decimals;
     private int time;
+    private int prevTime;
+    private int lapTime;
     private Boolean isRunning;
     
     public StopWatchTimer(Label timerLabel, int decimalPlaces) {
         listener = timerLabel;
         decimals = decimalPlaces;
+        time = 0;
+        prevTime = 0;
         
         timer = new Timeline(
                 new KeyFrame(Duration.ZERO, actionEvent -> {
@@ -30,25 +34,12 @@ public class StopWatchTimer {
                 new KeyFrame(Duration.millis(1))
         );
         timer.setCycleCount(Animation.INDEFINITE);
+        listener.setText(StopWatchTimer.formatTime(time, decimals));
     }
-
-        /*
-        Runnable updateTime = () -> {
-            listener.setText(StopWatchTimer.formatTime(time++, decimals));
-        };
-        
-        ActionListener taskPerformer = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                Platform.runLater(updateTime);
-            }
-        };
-        timer =  new Timer(1, taskPerformer);
-    }*/
     
-        /**
-         * Start the timer
-         */
+    /**
+     * Start the timer
+     */
     public void start() {
         timer.play();
         isRunning = true;
@@ -72,6 +63,16 @@ public class StopWatchTimer {
         }
     }
     
+    public int getLap() {
+        lapTime = time - prevTime;
+        prevTime = time;
+        return lapTime;
+    }
+    
+    public int getTime() {
+        return time;
+    }
+    
     /**
      * @param time - the current time in milliseconds
      * @return time in hh:mm:ss format
@@ -81,5 +82,4 @@ public class StopWatchTimer {
         int ms = time%1000;
         return String.format("%d.", seconds) + String.format("%03d", ms);
     }
-    
 }
