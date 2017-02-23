@@ -17,7 +17,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
- *
  * @author rmaccrimmon
  */
 public class StopWatchApp extends Application {
@@ -35,13 +34,10 @@ public class StopWatchApp extends Application {
         grid = new GridPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setAlignment(Pos.CENTER);
-        //grid.setGridLinesVisible(true);
         
         Label timerLabel = new Label("0");
-        Label[] labels = new Label[20];
-        for(int i = 0; i < 20; i++) {
-            labels[i] = new Label("test");
-        }
+        timerLabel.setFont(Font.font("Liberation Sans", 32));
+        GridPane.setHalignment(timerLabel, HPos.CENTER);
         
         Button startButton = new Button("Start");
         Button stopButton = new Button("Stop");
@@ -54,9 +50,6 @@ public class StopWatchApp extends Application {
         resetButton.setMaxWidth(Double.MAX_VALUE);
         lapButton.setMaxWidth(Double.MAX_VALUE);
         
-        timerLabel.setFont(Font.font("Liberation Sans", 32));
-        GridPane.setHalignment(timerLabel, HPos.CENTER);
-        
         scroll = new ScrollPane();
         scroll.setPrefSize(60, 120);
         scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -65,7 +58,6 @@ public class StopWatchApp extends Application {
         
         vb = new VBox();
         vb.setPadding(new Insets(5, 10, 5, 10));
-        
         scroll.setContent(vb);
         
         grid.add(timerLabel, 0, 0, 3, 1);
@@ -113,13 +105,19 @@ public class StopWatchApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
+    /**
+     * Stop the timer and add lap time 
+     */    
     private void stopTimer() {
         timer.stop();
         vb.getChildren().add(new Label(
                 StopWatchTimer.formatTime(timer.getLap(), 3)));
     }
     
+    /**
+     * Reset the time and clear lap times
+     */
     private void resetTimer() {
         if(!timer.isRunning()) {
             timer.reset();
@@ -127,6 +125,9 @@ public class StopWatchApp extends Application {
         }
     }
     
+    /**
+     * Get the lap time
+     */
     private void lapTimer() {
         if(timer.isRunning()) {
             vb.getChildren().add(new Label(

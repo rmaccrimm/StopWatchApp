@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 /**
- *
  * @author rmaccrimmon
  */
 public class StopWatchTimer {
@@ -64,16 +63,25 @@ public class StopWatchTimer {
         }
     }
     
+    /**
+     * @return time since last lap, or start if first lap
+     */
     public int getLap() {
         lapTime = time - prevTime;
         prevTime = time;
         return lapTime;
     }
     
+    /**
+     * @return total time since pressing start
+     */
     public int getTime() {
         return time;
     }
     
+    /**
+     * @return if timer is running
+     */
     public Boolean isRunning() {
         return running;
     }
