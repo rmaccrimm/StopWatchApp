@@ -18,7 +18,7 @@ public class StopWatchTimer {
     private int time;
     private int prevTime;
     private int lapTime;
-    private Boolean isRunning;
+    private Boolean running;
     
     public StopWatchTimer(Label timerLabel, int decimalPlaces) {
         listener = timerLabel;
@@ -42,7 +42,7 @@ public class StopWatchTimer {
      */
     public void start() {
         timer.play();
-        isRunning = true;
+        running = true;
     }
     
     /**
@@ -50,15 +50,16 @@ public class StopWatchTimer {
      */
     public void stop() {
         timer.stop();
-        isRunning = false;
+        running = false;
     }
     
     /**
      * Reset the timer to 0
      */
     public void reset() {
-        if (!isRunning) {
+        if (!running) {
             time = 0;
+            prevTime = 0;
             listener.setText(StopWatchTimer.formatTime(time, decimals));
         }
     }
@@ -71,6 +72,10 @@ public class StopWatchTimer {
     
     public int getTime() {
         return time;
+    }
+    
+    public Boolean isRunning() {
+        return running;
     }
     
     /**

@@ -22,13 +22,20 @@ import javafx.stage.Stage;
  */
 public class StopWatchApp extends Application {
     
+    private StopWatchTimer timer;
+    private BorderPane border;
+    private GridPane grid;
+    private ScrollPane scroll;
+    private VBox vb;
+    
     @Override
     public void start(Stage primaryStage) {
-        BorderPane border = new BorderPane();
         
-        GridPane grid = new GridPane();
+        border = new BorderPane();
+        grid = new GridPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setAlignment(Pos.CENTER);
+        //grid.setGridLinesVisible(true);
         
         Label timerLabel = new Label("0");
         Label[] labels = new Label[20];
@@ -40,6 +47,7 @@ public class StopWatchApp extends Application {
         Button stopButton = new Button("Stop");
         Button resetButton = new Button("Reset");
         Button lapButton = new Button("Lap");
+        Button clearButton = new Button("Clear");
         
         startButton.setMaxWidth(Double.MAX_VALUE);
         stopButton.setMaxWidth(Double.MAX_VALUE);
@@ -49,11 +57,13 @@ public class StopWatchApp extends Application {
         timerLabel.setFont(Font.font("Liberation Sans", 32));
         GridPane.setHalignment(timerLabel, HPos.CENTER);
         
-        ScrollPane scroll = new ScrollPane();
+        scroll = new ScrollPane();
         scroll.setPrefSize(60, 120);
-        scroll.setVbarPolicy(ScrollBarPolicy.NEVER);
+        scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
+        scroll.setPrefWidth(70);
         
-        VBox vb = new VBox();
+        vb = new VBox();
         vb.setPadding(new Insets(5, 10, 5, 10));
         
         scroll.setContent(vb);
@@ -66,29 +76,32 @@ public class StopWatchApp extends Application {
         grid.setVgap(10);
         grid.setHgap(10);
 
-        StopWatchTimer timer = new StopWatchTimer(timerLabel, 0);
+        timer = new StopWatchTimer(timerLabel, 0);
         
+        vb.heightProperty().addListener(listener ->{
+            scroll.setVvalue(scroll.getVmax());
+        });
+               
         startButton.setOnAction((ActionEvent evt) -> {
             timer.start();
         });
         
         stopButton.setOnAction((ActionEvent evt) -> {
-            timer.stop();
+            stopTimer();
         });
         
         resetButton.setOnAction((ActionEvent evt) -> {
-            timer.reset();
+            resetTimer();
         });
         
         lapButton.setOnAction((ActionEvent evt) -> {
-            vb.getChildren().add(new Label(
-                    StopWatchTimer.formatTime(timer.getLap(), 3)));
+            lapTimer();
         });
         
         border.setCenter(grid);
         border.setRight(scroll);
         
-        Scene scene = new Scene(border, 450, 250);
+        Scene scene = new Scene(border, 400, 250);
         primaryStage.setTitle("Stop Watch");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -101,4 +114,23 @@ public class StopWatchApp extends Application {
         launch(args);
     }
     
-}
+    private void stopTimer() {
+        timer.stop();
+        vb.getChildren().add(new Label(
+                StopWatchTimer.formatTime(timer.getLap(), 3)));
+    }
+    
+    private void resetTimer() {
+        if(!timer.isRunning()) {
+            timer.reset();
+            vb.getChildren().clear();
+        }
+    }
+    
+    private void lapTimer() {
+        if(timer.isRunning()) {
+            vb.getChildren().add(new Label(
+                    StopWatchTimer.formatTime(timer.getLap(), 3)));
+        }
+    }
+ }
